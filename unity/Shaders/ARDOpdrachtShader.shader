@@ -16,7 +16,7 @@
          uniform float _yaw;
          uniform float _temp;
 
-        float4 RotateAroundYInDegrees (float4 vertex, float3 degrees){
+        float4 RotateAroundInDegrees (float4 vertex, float3 degrees){
                      degrees[0] = (degrees[0] * -1) * 3.14159265359 / 180.0;  // yaw, a
                      degrees[1] = (degrees[1] *-1) * 3.14159265359 / 180.0;  // pitch, b
                      degrees[2] = degrees[2] * 3.14159265359 / 180.0;  // roll, g
@@ -33,7 +33,7 @@
             // vertex shader 
          {
             
-            return UnityObjectToClipPos(RotateAroundYInDegrees(vertexPos, float3(_yaw, _pitch, _roll)));
+            return UnityObjectToClipPos(RotateAroundInDegrees(vertexPos, float3(_yaw, _pitch, _roll)));
               // this line transforms the vertex input parameter 
               // and returns it as a nameless vertex output parameter 
               // (with semantic SV_POSITION)
