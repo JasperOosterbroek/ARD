@@ -16,16 +16,16 @@
          uniform float _yaw;
          uniform float _temp;
 
-        float4 RotateAroundYInDegrees (float4 vertex, float3 degrees){
+        float4 RotateAroundInDegrees (float4 vertex, float3 degrees){
                      degrees[0] = (degrees[0] * -1) * 3.14159265359 / 180.0;  // yaw, a
-                     degrees[1] = (degrees[1] *-1) * 3.14159265359 / 180.0;  // pitch, b
-                     degrees[2] = degrees[2] * 3.14159265359 / 180.0;  // roll, g
+                     degrees[1] = degrees[1] * 3.14159265359 / 180.0;  // pitch, b
+                     degrees[2] = (degrees[2] * -1) * 3.14159265359 / 180.0;  // roll, g
                      float3 sin, cos;
                      sincos(degrees, sin, cos);
-                     float3x3 mg = float3x3(1, 0, 0, 0, cos[2], -sin[2],0, sin[2], cos[2]);
-                     float3x3 mb = float3x3( cos[1], 0, sin[1], 0, 1, 0, -sin[1], 0, cos[1]);
-                     float3x3 ma = float3x3(cos[0], -sin[0],0, sin[0], cos[0], 0, 0, 0, 1);
-                     float3x3 m = mul(mg, mul(mb, ma));
+                     float3x3 m = float3x3(  cos[0] * cos[1],  cos[0] * sin[1] * sin[2] - sin[0] * cos[2],  cos[0] * sin[1] * cos[2] + sin[0] * sin[2],
+                                             sin[0] * cos[1],  sin[0] * sin[1] * sin[2] + cos[0] * cos[2],  sin[0] * sin[1] * cos[2] - cos[0] * sin[2],
+                                            -sin[1],           cos[1] * sin[2],                             cos[1] * cos[2]
+                     );
                      return float4(mul(m, vertex.xyz), vertex.w).xyzw;
                  }
         
@@ -33,7 +33,7 @@
             // vertex shader 
          {
             
-            return UnityObjectToClipPos(RotateAroundYInDegrees(vertexPos, float3(_yaw, _pitch, _roll)));
+            return UnityObjectToClipPos(RotateAroundInDegrees(vertexPos, float3(_yaw, _pitch, _roll)));
               // this line transforms the vertex input parameter 
               // and returns it as a nameless vertex output parameter 
               // (with semantic SV_POSITION)
@@ -41,8 +41,22 @@
 
          float4 frag(void) : COLOR // fragment shader
          {
-            float scaledValue = (_temp - 20) / (35 - 20);  
-            return float4(1.0, scaledValue, scaledValue, 1.0); 
+            float red = 0;
+            float green = 0;
+            float middleTemp = 25;
+            float highTemp = 35;
+            float scaledValue = (_temp - middleTemp) / (highTemp - middleTemp);
+            if (_temp > middleTemp){
+                green = 1.0 - scaledValue;
+                red = 1.0;
+            }
+            else{
+                red = scaledValue;
+                green = 1.0;
+            }
+
+            
+            return float4(red, green, 0.0, 1.0); 
                // this fragment shader returns a nameless fragment
                // output parameter (with semantic COLOR) that is set to
                // opaque red (red = 1, green = 0, blue = 0, alpha = 1)

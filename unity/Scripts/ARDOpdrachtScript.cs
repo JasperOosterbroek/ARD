@@ -32,9 +32,9 @@ public class ARDOpdrachtScript : MonoBehaviour
                 float roll = float.Parse(data[1], CultureInfo.InvariantCulture.NumberFormat);
                 float pitch = float.Parse(data[2], CultureInfo.InvariantCulture.NumberFormat);
                 float yaw = float.Parse(data[3], CultureInfo.InvariantCulture.NumberFormat);
-                Debug.Log("roll: " +roll);
-                Debug.Log("pitch: "+ pitch);
-                Debug.Log("yaw: "+ yaw);
+                // Debug.Log("roll: " +roll);
+                // Debug.Log("pitch: "+ pitch);
+                // Debug.Log("yaw: "+ yaw);
                 Debug.Log("temp: "+ temp);
                 Shader.SetGlobalFloat("_roll", roll);
                 Shader.SetGlobalFloat("_pitch", pitch);
