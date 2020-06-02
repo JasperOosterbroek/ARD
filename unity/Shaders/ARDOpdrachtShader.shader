@@ -71,8 +71,6 @@
             float4x4 modelMatrixInverse = unity_WorldToObject;
             float3 normalDirection = normalize(
                mul(normal, modelMatrixInverse).xyz);
-            // alternative: 
-            // float3 normalDirection = UnityObjectToWorldNormal(input.normal);
             float3 lightDirection = normalize(_WorldSpaceLightPos0.xyz);
  
             float3 diffuseReflection = _LightColor0.rgb * _Color.rgb
@@ -81,17 +79,11 @@
             output.col = float4(diffuseReflection, 1.0);
             
             return output;
-              // this line transforms the vertex input parameter 
-              // and returns it as a nameless vertex output parameter 
-              // (with semantic SV_POSITION)
          }
 
          float4 frag(vertexOutput input) : COLOR // fragment shader
          {
             return input.col;
-               // this fragment shader returns a nameless fragment
-               // output parameter (with semantic COLOR) that is set to
-               // opaque red (red = 1, green = 0, blue = 0, alpha = 1)
          }
 
          ENDCG // here ends the part in Cg 
